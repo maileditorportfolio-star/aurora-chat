@@ -1,0 +1,5 @@
+import { create } from 'zustand';
+import { authApi } from '../lib/api';
+export type User={id:string;public_id:string;name:string;email:string;avatar_url?:string};
+type State={user:User|null;loading:boolean;error:string|null;login:(email:string,password:string)=>Promise<void>;register:(name:string,email:string,password:string)=>Promise<void>;logout:()=>void};
+export const useAuth=create<State>((set)=>({user:null,loading:false,error:null,login:async(email,password)=>{set({loading:true,error:null});try{const r=await authApi.login({email,password});localStorage.setItem('aurora-token',r.token);set({user:r.user,loading:false});}catch(e){set({loading:false,error:'Unable to sign in'});throw e;}},register:async(name,email,password)=>{set({loading:true,error:null});try{const r=await authApi.register({name,email,password});localStorage.setItem('aurora-token',r.token);set({user:r.user,loading:false});}catch(e){set({loading:false,error:'Unable to create account'});throw e;}},logout:()=>{localStorage.removeItem('aurora-token');set({user:null});}}));

@@ -1,0 +1,4 @@
+const DB='aurora-chat-device'; const STORE='messages';
+function open(){return new Promise<IDBDatabase>((resolve,reject)=>{const req=indexedDB.open(DB,1);req.onupgradeneeded=()=>req.result.createObjectStore(STORE,{keyPath:'id'});req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});}
+export async function saveDeviceMessage(message:Record<string,unknown>){const db=await open();const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(message);return new Promise<void>((resolve,reject)=>{tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);});}
+export async function getDeviceMessages(conversationId:string){const db=await open();return new Promise<Record<string,unknown>[]>((resolve,reject)=>{const req=db.transaction(STORE).objectStore(STORE).getAll();req.onsuccess=()=>resolve(req.result.filter((m)=>m.conversationId===conversationId));req.onerror=()=>reject(req.error);});}
