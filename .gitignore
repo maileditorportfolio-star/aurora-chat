@@ -1,24 +1,32 @@
-*.log
-.DS_Store
+# Local env
 .env
-.env.backup
 .env.production
-.phpactor.json
-.phpunit.result.cache
-/.fleet
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
+.env.backup
+*.env
+
+# Dependencies
 /node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/storage/pail
 /vendor
-Homestead.json
-Homestead.yaml
-Thumbs.db
+
+# Storage & Logs
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+# Agent & Dev files
+Agent.md
+*.txt
+*.bat
+*.zip
+ftp_*
+verify*
+mkdirs.txt
+b1.txt
+b2.txt
+b3.txt
+
+# Client build
+/client/node_modules
+/client/dist
+/public/build

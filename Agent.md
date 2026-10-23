@@ -94,17 +94,5 @@ D:\aurora-chat/
 
 ---
 
-## Next Steps (for next agent session)
-1. Write all Laravel migrations
-2. Create models + factories + seeders
-3. Build auth controllers (register/login/google)
-4. Build user shortId service
-5. Build conversation/message/report controllers
-6. Build socket.io server (separate Node process)
-7. Build React frontend pages + components
-8. Build crypto lib (ECDH + AES-GCM)
-9. Build IndexedDB wrapper
-10. Build admin dashboard
-11. Add Capacitor Android wrapper
-12. Deploy to InfinityFree
-13. Push to GitHub
+## Deployment Log
+- 2026-10-23 12:45: Project scaffolded, core services & controllers built, frontend & backend uploaded to InfinityFree (`aurora-chat.infy.click`), configured with production MySQL database (`if0_43254068_aurora_chat`). Deployment workflow script `deploy.sh` established.
