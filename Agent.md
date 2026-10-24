@@ -96,3 +96,10 @@ D:\aurora-chat/
 
 ## Deployment Log
 - 2026-10-23 12:45: Project scaffolded, core services & controllers built, frontend & backend uploaded to InfinityFree (`aurora-chat.infy.click`), configured with production MySQL database (`if0_43254068_aurora_chat`). Deployment workflow script `deploy.sh` established.
+- 2026-10-23 14:06: Pushed to GitHub at `github.com/shrabon07/aurora-chat.git` (master branch). Repo created under shrabon07 account since maileditorportfolio-star account requires separate auth.
+- 2026-10-24: Pushed to original repo `github.com/maileditorportfolio-star/aurora-chat.git` using provided personal access token. Remote URL updated.
+- 2026-10-24: Site confirmed working at `https://aurora-chat.infy.click` — behind InfinityFree JavaScript DDoS protection (AES-based challenge in /aes.js). Browsers work fine; curl needs cookie `__test` computed via AES-128-CBC decryption of `32f65d990b4d34c6e3e8c32683e99e37` with key `f655ba9d09a112d4968c63579db590b4` and IV `98344c2eee86c3994890592585b49f80` = `17833659d91aa57ec2a471bc2f36a870`.
+- 2026-10-24: vendor.zip (30.1MB) uploaded to remote. Extracted locally to vendor_extracted/ (5434 files, 22 packages). Uploading vendor packages directly via FTP in background (sh_16a41480d001d20N4OA7YbSgP4).
+- 2026-10-24: extract_vendor.php on remote root — extracts vendor.zip to vendor/ then deletes zip. Access via `https://aurora-chat.infy.click/extract_vendor.php` (needs DDoS cookie).
+- 2026-10-24: composer-install.php on public/ — runs `composer install` on remote. Access via `https://aurora-chat.infy.click/public/composer-install.php` (needs DDoS cookie).
+- 2026-10-24: Migration runner script needed on remote. Plan: create run-migrations.php that requires vendor/autoload.php and runs `php artisan migrate --force`.

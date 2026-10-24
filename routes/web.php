@@ -10,9 +10,9 @@ Route::get('/', function () {
 Route::get('/chat', function (Request $request) {
     $html = file_get_contents(base_path('public/chat.html'));
     return response($html, 200, ['Content-Type' => 'text/html']);
-})->middleware('cors');
+});
 
 Route::get('/admin', function (Request $request) {
     $html = file_get_contents(base_path('public/admin.html'));
     return response($html, 200, ['Content-Type' => 'text/html']);
-})->middleware('cors');
+});

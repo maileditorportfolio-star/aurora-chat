@@ -17,6 +17,19 @@ class ConversationController extends Controller
     {
     }
 
+    private function getInput(Request $request): array
+    {
+        $rawBody = file_get_contents('php://input');
+        if ($rawBody && $request->isJson()) {
+            $fixed = str_replace(['\\:', '\\,'], [':', ','], $rawBody);
+            $decoded = json_decode($fixed, true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+        return $request->all();
+    }
+
     public function index(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -26,6 +39,7 @@ class ConversationController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        $data = $this->getInput($request);
         $data = $request->validate([
             'type' => 'required|in:dm,group',
             'title' => 'nullable|string|max:120',
@@ -59,6 +73,7 @@ class ConversationController extends Controller
 
     public function addMember(Request $request, int $conversationId): JsonResponse
     {
+        $data = $this->getInput($request);
         $data = $request->validate([
             'user_id' => 'required|integer|exists:users,id',
             'role' => 'sometimes|in:member,admin,owner',

@@ -3,12 +3,15 @@ import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import axios from 'axios';
 
-const PORT = Number(process.env.SOCKET_IO_PORT || 6001);
+const PORT = Number(process.env.PORT || process.env.SOCKET_IO_PORT || 6003);
 const API_URL = process.env.API_URL || 'http://localhost:8000/api';
-const CORS = (process.env.SOCKET_IO_CORS || 'http://localhost:5173').split(',');
+const CORS = (process.env.SOCKET_IO_CORS || 'https://chat.auroracyber.online').split(',');
+// Passenger base URI (e.g. /socketio) for correct path handling
+const PASSENGER_BASE_URI = process.env.PASSENGER_BASE_URI || '';
 
 const httpServer = createServer((req, res) => {
-  if (req.url === '/health') {
+  const path = req.url?.replace(PASSENGER_BASE_URI, '') || req.url;
+  if (path === '/health') {
     res.writeHead(200, { 'content-type': 'application/json' });
     res.end(JSON.stringify({ status: 'ok', service: 'aurora-chat-socket' }));
     return;
@@ -20,6 +23,7 @@ const httpServer = createServer((req, res) => {
 const io = new Server(httpServer, {
   cors: { origin: CORS, credentials: true },
   transports: ['websocket', 'polling'],
+  path: PASSENGER_BASE_URI ? `${PASSENGER_BASE_URI}/socket.io` : '/socket.io',
 });
 
 const users = new Map();

@@ -12,12 +12,21 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->append(\Illuminate\Http\Middleware\HandleCors::class);
+        // API middleware - HandleCors must be early for CORS headers
+        // FixCorruptedJson must run early to fix LiteSpeed-mod_security JSON body corruption
+        $middleware->api(prepend: [
+            \Illuminate\Http\Middleware\HandleCors::class,
+            \App\Http\Middleware\FixCorruptedJson::class,
+        ]);
+        
+        // Web middleware
+        $middleware->web(append: [
+            \Illuminate\Http\Middleware\HandleCors::class,
+        ]);
     })
     ->withProviders([
         \Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         \App\Providers\AppServiceProvider::class,
-        \App\Providers\CorsServiceProvider::class,
         \App\Providers\AdminGuardProvider::class,
     ])
     ->withExceptions(function (Exceptions $exceptions): void {

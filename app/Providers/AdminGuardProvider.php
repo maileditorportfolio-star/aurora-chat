@@ -19,7 +19,7 @@ class AdminGuardProvider extends ServiceProvider
     public function boot(): void
     {
         \Illuminate\Support\Facades\Auth::extend('admin', function ($app, $name, array $config) {
-            return new class($app['request'], $app['auth']->createUserProvider($config)) {
+            return new class($app['request'], $app['auth']->createUserProvider($config['provider'])) {
                 public function __construct(private $request, private $provider) {}
 
                 public function user()
@@ -60,7 +60,7 @@ class AdminGuardProvider extends ServiceProvider
 
                 public function login($user, $remember = false)
                 {
-                    return \Tymon\JWTAuth\Facades\JWTAuth::login($user);
+                    return \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
                 }
 
                 public function logout()

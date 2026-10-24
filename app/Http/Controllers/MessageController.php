@@ -14,8 +14,22 @@ class MessageController extends Controller
     {
     }
 
+    private function getInput(Request $request): array
+    {
+        $rawBody = file_get_contents('php://input');
+        if ($rawBody && $request->isJson()) {
+            $fixed = str_replace(['\\:', '\\,'], [':', ','], $rawBody);
+            $decoded = json_decode($fixed, true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+        return $request->all();
+    }
+
     public function store(Request $request): JsonResponse
     {
+        $data = $this->getInput($request);
         $data = $request->validate([
             'conversation_id' => 'required|integer|exists:conversations,id',
             'message_id' => 'required|string|max:36',

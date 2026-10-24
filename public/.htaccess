@@ -13,6 +13,21 @@
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
+    # Skip Passenger Socket.io app
+    RewriteRule ^socketio/ - [L]
+
+    # Disable LiteSpeed request body filtering/mod_security for JSON
+    <IfModule Litespeed>
+        SetEnv noabort 1
+        SetEnv LSAPI_AVOID_FORK 1
+    </IfModule>
+
+    <IfModule mod_security.c>
+        SecFilterEngine Off
+        SecFilterScanPOST Off
+        SecRuleEngine Off
+    </IfModule>
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$

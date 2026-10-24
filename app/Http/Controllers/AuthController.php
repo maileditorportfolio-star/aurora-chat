@@ -15,8 +15,26 @@ class AuthController extends Controller
     {
     }
 
+    /**
+     * Get request data, fixing LiteSpeed JSON body corruption
+     */
+    private function getInput(Request $request): array
+    {
+        $rawBody = file_get_contents('php://input');
+        if ($rawBody && $request->isJson()) {
+            // Fix LiteSpeed mod_security JSON body corruption
+            $fixed = str_replace(['\\:', '\\,'], [':', ','], $rawBody);
+            $decoded = json_decode($fixed, true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+        return $request->all();
+    }
+
     public function register(Request $request): JsonResponse
     {
+        $data = $this->getInput($request);
         $data = $request->validate([
             'name' => 'required|string|min:2|max:80',
             'email' => 'required|email|max:255',
@@ -67,6 +85,7 @@ class AuthController extends Controller
 
     public function google(Request $request): JsonResponse
     {
+        $data = $this->getInput($request);
         $data = $request->validate([
             'google_id' => 'required|string',
             'email' => 'required|email',

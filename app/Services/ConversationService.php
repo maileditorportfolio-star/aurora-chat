@@ -84,7 +84,7 @@ class ConversationService
     {
         return ConversationMember::where('user_id', $userId)
             ->with(['conversation.members.user'])
-            ->orderBy('created_at', 'desc')
+            ->orderBy('joined_at', 'desc')
             ->get()
             ->map(function (ConversationMember $m) {
                 $conv = $m->conversation;

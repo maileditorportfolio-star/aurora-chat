@@ -53,3 +53,15 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('/admin/submissions/{id}/read', [AdminController::class, 'markRead']);
     Route::get('/admin/stats', [AdminController::class, 'stats']);
 });
+
+// Debug
+Route::post('/debug-body', function (Request $request) {
+    return response()->json([
+        'content_type' => $request->header('Content-Type'),
+        'method' => $request->method(),
+        'body' => file_get_contents('php://input'),
+        'all' => $request->all(),
+        'json' => $request->json()->all(),
+        'is_json' => $request->isJson(),
+    ]);
+});
